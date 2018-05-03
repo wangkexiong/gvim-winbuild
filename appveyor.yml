@@ -1,0 +1,67 @@
+image: Visual Studio 2015
+
+# Should only be triggered by schedule run
+skip_tags: true
+branches:
+  only:
+    - nonexisted
+
+environment:
+  APPVEYOR_RDP_PASSWORD:
+    secure: Hj73NIE1ZHUH7DGShakR4Q==
+  GITHUB_USER:
+    secure: qozx3wkmakdI3k/sz9Ml8Q==
+  GITHUB_EMAIL:
+    secure: Xou4FEHMweGQSeay5Q9/LjoLWwlDzMmBa39KYVylgK0=
+  GITHUB_TOKEN:
+    secure: HImK7idCBTKUB6w7DRTDV/5Ko9+TlZCLOXjbuGNb+InxYQm+H72G8fNPKVcrfcEz
+
+  matrix:
+    - VSVER: 9
+
+install:
+  - choco install upx --x86 -y
+  - RefreshEnv
+  - MKDIR package\tools\x86
+  - COPY C:\Windows\SysWOW64\python27.dll package\tools\x86\python27.dll
+  - curl -fsSL -o package\tools\x86\diff.exe https://github.com/wangkexiong/diff.msbuild/releases/download/vc9.x86/diff.exe
+  - curl -fsSL -o package\tools\x86\ctags.exe https://github.com/wangkexiong/exuberant.ctags/releases/download/vc9.x86/ctags.exe
+  - MKDIR package\tools\gettext32
+  - curl -fsSL -o package\tools\gettext32\libintl-8.dll https://github.com/wangkexiong/build.mxe/releases/download/gettext4vim-0.19.8.1.x86/libintl-8.dll
+  - curl -fsSL -o package\tools\gettext32\libiconv-2.dll https://github.com/wangkexiong/build.mxe/releases/download/gettext4vim-0.19.8.1.x86/libiconv-2.dll
+  - curl -fsSL -o package\tools\gettext32\libgcc_s_sjlj-1.dll https://github.com/wangkexiong/build.mxe/releases/download/gettext4vim-0.19.8.1.x86/libgcc_s_sjlj-1.dll
+  - MKDIR package\tools\amd64
+  - COPY C:\Windows\System32\python27.dll package\tools\amd64\python27.dll
+  - curl -fsSL -o package\tools\amd64\diff.exe https://github.com/wangkexiong/diff.msbuild/releases/download/vc9.amd64/diff.exe
+  - curl -fsSL -o package\tools\amd64\ctags.exe https://github.com/wangkexiong/exuberant.ctags/releases/download/vc9.amd64/ctags.exe
+  - MKDIR package\tools\gettext64
+  - curl -fsSL -o package\tools\gettext64\libintl-8.dll https://github.com/wangkexiong/build.mxe/releases/download/gettext4vim-0.19.8.1.amd64/libintl-8.dll
+  - curl -fsSL -o package\tools\gettext64\libiconv-2.dll https://github.com/wangkexiong/build.mxe/releases/download/gettext4vim-0.19.8.1.amd64/libiconv-2.dll
+
+before_build:
+  - ps: >-
+      $env:VSCOMNTOOLS=(Get-Content ("env:VS" + "$env:VSVER" + "0COMNTOOLS"))
+
+build_script:
+  - start
+  - IF EXIST *.exe SET READY_DEPLOY=true
+
+artifacts:
+  - path: '*.exe'
+
+deploy:
+  - provider: GitHub
+    artifact: /.*\.exe/
+    release: $(BUILD_TAG)
+    draft: false
+    prerelease: false
+    force_update: false
+    auth_token: $(GITHUB_TOKEN)
+    on:
+      branch: master                # release from master branch only
+      appveyor_repo_tag: false
+      READY_DEPLOY: true
+
+#on_finish:
+#  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+
