@@ -45,6 +45,7 @@ before_build:
 build_script:
   - start
   - IF EXIST *.exe SET READY_DEPLOY=true
+  - IF EXIST *.exe CALL trigger_commit
 
 artifacts:
   - path: '*.exe'
