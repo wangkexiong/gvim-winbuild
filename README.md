@@ -14,3 +14,7 @@
 
 ## VisVim plugin on 64bits Windows is NOT tested...
 
+## Patches
+
+* v8.0.1783 breaks vc9 compilation. (uint8_t)
+

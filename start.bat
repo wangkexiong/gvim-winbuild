@@ -22,6 +22,10 @@ IF %TIMESTAMP% LSS %COMMIT_TIMESTAMP% (
   COPY ..\..\package\gvimall.nsi ..\nsis\.
   XCOPY /E ..\..\package\tools ..\nsis\tools\
 
+  PUSHD ..\..\patch
+    FOR %%f in (*.bat) DO CALL %%f
+  POPD
+
   CALL build
 ) ELSE (
   @ECHO "NO COMMIT Yesterday ..."
