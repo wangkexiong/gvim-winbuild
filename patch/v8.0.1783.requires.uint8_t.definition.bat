@@ -3,6 +3,7 @@
 IF NOT EXIST ..\vim\src\proto GOTO :EOF
 
 PUSHD ..\vim\src\proto\
+SET NEED_ADD_UINT8_DEF=FALSE
 
 FOR /F "usebackq tokens=*" %%G IN (`FINDSTR /I /C:"uint8_t" term.pro`) DO (
   SET NEED_ADD_UINT8_DEF=TRUE

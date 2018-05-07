@@ -17,5 +17,5 @@
 
 ## Patches
 
-* v8.0.1783 breaks vc9 compilation. (uint8_t)
+* ~~v8.0.1783 breaks vc9 compilation. (uint8_t)~~ v8.0.1791 fix this
 
