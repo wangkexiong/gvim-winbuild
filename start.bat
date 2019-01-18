@@ -19,7 +19,6 @@ IF %TIMESTAMP% LSS %COMMIT_TIMESTAMP% (
   COPY ..\..\vcvars32all.bat .
   COPY ..\..\vcvars64all.bat .
 
-  COPY ..\..\package\gvimall.nsi ..\nsis\.
   XCOPY /E ..\..\package\tools ..\nsis\tools\
 
   PUSHD ..\..\patch
