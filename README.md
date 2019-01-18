@@ -6,14 +6,12 @@
 
 * The job is scheduled to be run at 12:00 Beijing Time everyday. Er, UTC Time 04:00.
 
-## The target installation package supports both 32 and 64 bits version of Windows.
-
+## No 64bit gvim.exe anymore.
 * The mininum requirement is WindowsXP.
 * COLOR_EMOJI is disable. (Which requires WinSDK8.1)
 * VC9 Runtime libraries is NOT included, please install from [microsoft](https://www.microsoft.com/en-us/download/details.aspx?id=29)
-* The installation package will check if 32 or 64 bits of Windows, and install 32 or 64 versions of vim
-
-## VisVim plugin on 64bits Windows is NOT tested...
+* Python2 enabled. Need copy python.dll under VIM directory with Python2 installed.
+* The last working balll with 64bit gvim.exe is [v8.1.0635](https://github.com/wangkexiong/gvim-winbuild/releases/download/v8.1.0635/gvim81.exe)
 
 ## Patches
 
