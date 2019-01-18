@@ -33,61 +33,46 @@ SET "BEFORE_LIB=%LIB%"
 SET "BEFORE_LIBPATH=%LIBPATH%"
 SET "BEFORE_PATH=%PATH%"
 
+@REM Building GvimExt64.dll
+call vcvars64all
+SET VIM64_OPTIONS=%VIM_OPTIONS% CPU=AMD64 SUBSYSTEM_VER=5.02
+
+nmake -f Make_mvc.mak %VIM64_OPTIONS% GvimExt/gvimext.dll
+PUSHD GvimExt
+copy gvimext.dll gvimext64.dll
+nmake -f Makefile clean
+POPD
+
 @REM Building win32 version
-MKDIR ..\nsis\build\x86
-CALL vcvars32all
-SET VIM32_OPTIONS=%VIM_OPTIONS% SUBSYSTEM_VER=5.01 ^
-                  PYTHON=C:\Python27 PYTHON_VER=27 DYNAMIC_PYTHON=yes
-
-nmake -f Make_mvc.mak GUI=yes %VIM32_OPTIONS%
-COPY gvim.exe ..\nsis\build\x86\gvim.exe
-nmake -f Make_mvc.mak GUI=yes %VIM32_OPTIONS% clean
-
-nmake -f Make_mvc.mak GUI=no %VIM32_OPTIONS%
-COPY vim.exe ..\nsis\build\x86\vim.exe
-COPY install.exe ..\nsis\build\x86\install.exe
-COPY uninstal.exe ..\nsis\build\x86\uninstal.exe
-COPY vimrun.exe ..\nsis\build\x86\vimrun.exe
-COPY tee\tee.exe ..\nsis\build\x86\tee.exe
-COPY xxd\xxd.exe ..\nsis\build\x86\xxd.exe
-COPY GvimExt\gvimext.dll ..\nsis\build\x86\gvimext.dll
-nmake -f Make_mvc.mak GUI=no %VIM32_OPTIONS% clean
-
-
-@REM Building AMD64 version
 SET "INCLUDE=%BEFORE_INCLUDE%"
 SET "LIB=%BEFORE_LIB%"
 SET "LIBPATH=%BEFORE_LIBPATH%"
 SET "PATH=%BEFORE_PATH%"
 
-MKDIR ..\nsis\build\amd64
-CALL vcvars64all
-SET VIM64_OPTIONS=%VIM_OPTIONS% CPU=AMD64 SUBSYSTEM_VER=5.02 ^
-                  PYTHON=C:\Python27-x64 PYTHON_VER=27 DYNAMIC_PYTHON=yes
+CALL vcvars32all
+SET VIM32_OPTIONS=%VIM_OPTIONS% SUBSYSTEM_VER=5.01 ^
+                  PYTHON=C:\Python27 PYTHON_VER=27 DYNAMIC_PYTHON=yes
 
-nmake -f Make_mvc.mak GUI=yes %VIM64_OPTIONS%
-COPY gvim.exe ..\nsis\build\amd64\gvim.exe
-nmake -f Make_mvc.mak GUI=yes %VIM64_OPTIONS% clean
+nmake -f Make_mvc.mak GUI=yes %VIM32_OPTIONS%
+COPY gvim.exe gvim_ole.exe
 
-nmake -f Make_mvc.mak GUI=no %VIM64_OPTIONS%
-COPY vim.exe ..\nsis\build\amd64\vim.exe
-COPY install.exe ..\nsis\build\amd64\install.exe
-COPY uninstal.exe ..\nsis\build\amd64\uninstal.exe
-COPY vimrun.exe ..\nsis\build\amd64\vimrun.exe
-COPY tee\tee.exe ..\nsis\build\amd64\tee.exe
-COPY xxd\xxd.exe ..\nsis\build\amd64\xxd.exe
-COPY GvimExt\gvimext.dll ..\nsis\build\amd64\gvimext.dll
-nmake -f Make_mvc.mak GUI=no %VIM64_OPTIONS% clean
+nmake -f Make_mvc.mak GUI=no %VIM32_OPTIONS%
+call ..\tools\rename.bat
 
 @REM i18n
 PUSHD po
 nmake -f Make_mvc.mak install-all GETTEXT_PATH=c:\cygwin\bin
 POPD
 
+@REM uganda.nsis.txt
+PUSHD ..\runtime\doc
+sed -e 's/[ build]*\*[-a-zA-Z0-9.]*\*//g' -e 's/vim:tw=78://' uganda.txt | uniq > uganda.nsis.txt
+POPD
+
 @REM makensis
 PUSHD ..\nsis
-sed -e 's/[ build]*\*[-a-zA-Z0-9.]*\*//g' -e 's/vim:tw=78://' ..\runtime\doc\uganda.txt | uniq > uganda.nsis.txt
-"C:\Program Files (x86)\NSIS\makensis.exe" gvimall.nsi
+7z x icons.zip
+"C:\Program Files (x86)\NSIS\makensis.exe" /DVIMRT=..\runtime /DVIMTOOLS=tools /DGETTEXT=tools gvim.nsi
 COPY *.exe ..\..
 POPD
 
