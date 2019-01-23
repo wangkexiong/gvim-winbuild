@@ -28,13 +28,13 @@ install:
   - curl -fsSL -o ctags.exe https://github.com/wangkexiong/exuberant.ctags/releases/download/vc9.x86/ctags.exe
   - curl -fsSL https://github.com/rprichard/winpty/releases/download/0.4.3/winpty-0.4.3-msys2-2.7.0-ia32.tar.gz | tar xzvf - --strip-components 2 winpty-0.4.3-msys2-2.7.0-ia32/bin/winpty-agent.exe winpty-0.4.3-msys2-2.7.0-ia32/bin/winpty.dll
   - MOVE winpty.dll winpty32.dll
+  - SET "PATH_STORE=%PATH%"
+  - SET "PATH=C:\Cygwin\bin;%PATH%"
   - MKDIR gettext32
-  - curl -fsSL -o gettext32\libintl-8.dll https://github.com/wangkexiong/build.mxe/releases/download/gettext4vim-0.19.8.1.x86/libintl-8.dll
-  - curl -fsSL -o gettext32\libiconv-2.dll https://github.com/wangkexiong/build.mxe/releases/download/gettext4vim-0.19.8.1.x86/libiconv-2.dll
-  - curl -fsSL -o gettext32\libgcc_s_sjlj-1.dll https://github.com/wangkexiong/build.mxe/releases/download/gettext4vim-0.19.8.1.x86/libgcc_s_sjlj-1.dll
+  - curl -fsSL https://github.com/wangkexiong/build.mxe/releases/download/gettext4vim.build/gettext4vim-0.19.8.1.x86.tar.xz | tar xJvf - -C gettext32
   - MKDIR gettext64
-  - curl -fsSL -o gettext64\libintl-8.dll https://github.com/wangkexiong/build.mxe/releases/download/gettext4vim-0.19.8.1.amd64/libintl-8.dll
-  - curl -fsSL -o gettext64\libiconv-2.dll https://github.com/wangkexiong/build.mxe/releases/download/gettext4vim-0.19.8.1.amd64/libiconv-2.dll
+  - curl -fsSL https://github.com/wangkexiong/build.mxe/releases/download/gettext4vim.build/gettext4vim-0.19.8.1.amd64.tar.xz | tar xJvf - -C gettext64
+  - SET "PATH=%PATH_STORE%"
   - CD ..\..
 
 before_build:
