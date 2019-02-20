@@ -1,6 +1,6 @@
 ![Build Status](https://ci.appveyor.com/api/projects/status/github/wangkexiong/gvim-winbuild?branch=master&svg=true)
 
-**Last Build in: Tue, 22 Jan 2019 04:03:29 +0000**
+**Last Build in: Thu, 26 Sep 2019 04:03:16 +0000**
 
 ## Daily build Bram Moolenaar's vim with appveyor
 
