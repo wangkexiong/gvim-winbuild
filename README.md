@@ -16,4 +16,5 @@
 ## Patches
 
 * ~~v8.0.1783 breaks vc9 compilation. (uint8_t)~~ v8.0.1791 fix this
+* v8.1.2082 change uninstal.exe to uninstall.exe
 
